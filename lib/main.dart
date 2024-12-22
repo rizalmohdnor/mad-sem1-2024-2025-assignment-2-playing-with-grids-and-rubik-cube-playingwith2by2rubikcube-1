@@ -5,7 +5,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,31 +31,44 @@ class CubeState {
 
   // Rotate top face to the left, modify if necessary
   void rotateTop() {
-    // Store the top row of each face
-    List<Color> topRowFront = [faces[0][0], faces[0][1]];
-    List<Color> topRowLeft = [faces[1][0], faces[1][1]];
-    List<Color> topRowRight = [faces[2][0], faces[2][1]];
-    List<Color> topRowBack = [faces[3][0], faces[3][1]];
+    //Rotate the top face clockwise
 
-    // Rotate top face
     List<Color> tempTop = [...faces[4]];
-    faces[4] = [tempTop[2], tempTop[3], tempTop[0], tempTop[1]];
+    faces[4] = [tempTop[2], tempTop[0], tempTop[3], tempTop[1]];
 
-    // Update adjacent faces
-    faces[0] = [faces[3][2], faces[3][3], ...faces[0].sublist(2)];
-    faces[1] = [faces[0][2], faces[0][3], ...faces[1].sublist(2)];
-    faces[2] = [faces[1][2], faces[1][3], ...faces[2].sublist(2)];
-    faces[3] = [faces[2][2], faces[2][3], ...faces[3].sublist(2)];
+    //Rotate adjacent faces
+    List<Color> tempFront = [faces[0][0], faces[0][1]];
+    faces[0][0] = faces[1][0];
+    faces[0][1] = faces[1][1];
+    faces[1][0] = faces[3][2];
+    faces[1][1] = faces[3][3];
+    faces[3][2] = faces[2][0];
+    faces[3][3] = faces[2][1];
+    faces[2][0] = tempFront[0];
+    faces[2][1] = tempFront[1];
   }
-  
+
   // Rotate top face to the left, modify if necessary
   void rotateBottom() {
-    //Need to implement your code here
+    //Rotate bottom clockwise
+    List<Color> tempBottom = [...faces[5]];
+    faces[5] = [tempBottom[2], tempBottom[0], tempBottom[3], tempBottom[1]];
+
+    // Rotate adjacent faces
+    List<Color> tempFront = [faces[0][2], faces[0][3]];
+    faces[0][2] = faces[1][2];
+    faces[0][3] = faces[1][3];
+    faces[1][2] = faces[3][0];
+    faces[1][3] = faces[3][1];
+    faces[3][0] = faces[2][2];
+    faces[3][1] = faces[2][3];
+    faces[2][2] = tempFront[0];
+    faces[2][3] = tempFront[1];
   }
 }
 
 class CubeScreen extends StatefulWidget {
-  const CubeScreen({Key? key}) : super(key: key);
+  const CubeScreen({super.key});
 
   @override
   _CubeScreenState createState() => _CubeScreenState();
@@ -67,6 +80,12 @@ class _CubeScreenState extends State<CubeScreen> {
   void rotateTop() {
     setState(() {
       cube.rotateTop();
+    });
+  }
+
+  void rotateBottom() {
+    setState(() {
+      cube.rotateBottom();
     });
   }
 
@@ -88,13 +107,6 @@ class _CubeScreenState extends State<CubeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('2x2 Rubik\'s Cube'),
-        // instead of using an icon button here, create atleast 2 buttons to rotate the faces, rotate left face, or rotate right face, or implement all rotations.
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.rotate_left),
-            onPressed: rotateTop,
-          )
-        ],
       ),
       body: Center(
         child: Column(
@@ -126,10 +138,15 @@ class _CubeScreenState extends State<CubeScreen> {
                   ],
                 ),
                 // Front face
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: buildFace(cube.faces[0]),
+                Column(
+                  children: [
+                    const Text('Front'),
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: buildFace(cube.faces[0]),
+                    ),
+                  ],
                 ),
                 // Right face
                 Column(
@@ -144,8 +161,41 @@ class _CubeScreenState extends State<CubeScreen> {
                 ),
               ],
             ),
-            // Bottom face , implement your bottom face
-            // Rear face, implement your rear face
+            // Bottom face
+            Column(
+              children: [
+                const Text('Bottom'),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: buildFace(cube.faces[5]),
+                ),
+              ],
+            ),
+            // Rear face
+            Column(
+              children: [
+                const Text('Back'),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: buildFace(cube.faces[3]),
+                ),
+              ],
+            ),
+            // Buttons for rotation
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: rotateTop,
+                  child: const Text('Rotate Top'),
+                ),
+                const SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: rotateBottom,
+                  child: const Text('Rotate Bottom'),
                 ),
               ],
             ),
