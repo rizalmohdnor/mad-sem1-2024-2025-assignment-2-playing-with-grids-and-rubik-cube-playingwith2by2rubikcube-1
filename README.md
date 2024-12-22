@@ -2,9 +2,9 @@
 # Assignment 2: Play with a 2x2 Rubik Cube
 by 
 
-**NAME**:
+**NAME**:**MUHAMMAD DANIEL 'IMRAN BIN NOR AZAM**
 
-**Matric ID**
+**Matric ID**: **2113649**
 
 ## Objective
 
