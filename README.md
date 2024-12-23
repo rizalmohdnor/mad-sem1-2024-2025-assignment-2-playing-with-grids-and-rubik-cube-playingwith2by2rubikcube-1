@@ -2,9 +2,9 @@
 # Assignment 2: Play with a 2x2 Rubik Cube
 by 
 
-**NAME**:
+**NAME**: Muhammad Syafiy bin Abdul Rahman
 
-**Matric ID**
+**Matric ID**: 2115569
 
 ## Objective
 
